@@ -1,0 +1,6 @@
+@Afi.Api_HostAddress = http://localhost:5122
+
+GET {{Afi.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
