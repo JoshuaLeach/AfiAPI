@@ -1,16 +1,14 @@
-﻿using Afi.Logic.Models;
+﻿using Afi.Data.Entities;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 
-namespace Afi.Logic.Services
+namespace Afi.Data.Interfaces
 {
-    public interface ICustomerService
+    public interface ICustomerRepository
     {
-        int RegisterCustomer(Customer customer);
+        int CreateCustomer(Customer customer);
         Customer GetCustomer(int id);
-        void ValidateCustomer(Customer customer);
-
     }
 }

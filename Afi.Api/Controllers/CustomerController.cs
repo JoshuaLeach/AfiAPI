@@ -19,9 +19,22 @@ namespace Afi.Api.Controllers
         }
 
         [HttpGet(Name = "GetCustomer")]
-        public IActionResult Get()
+        public IActionResult Get(int id)
         {
-            return Ok(new List<Customer>());
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var customer = _customerService.GetCustomer(id);
+                return Ok(customer);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         
         [HttpPost(Name = "RegisterCustomer")]

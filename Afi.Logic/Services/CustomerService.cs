@@ -1,4 +1,6 @@
-﻿using Afi.Logic.Models;
+﻿using Afi.Data.Interfaces;
+using Afi.Data.Repositories;
+using Afi.Logic.Models;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Http.Headers;
@@ -9,16 +11,45 @@ namespace Afi.Logic.Services
     public class CustomerService : ICustomerService
     {
         private readonly ILogger<ICustomerService> _logger;
+        private readonly ICustomerRepository _customerRepository;
 
-        public CustomerService(ILogger<ICustomerService> logger)
+        public CustomerService(ILogger<ICustomerService> logger, ICustomerRepository customerRepository)
         {
             _logger = logger;
+            _customerRepository = customerRepository;
         }
 
         public int RegisterCustomer(Customer customer)
         {
             ValidateCustomer(customer);
-            return 4;
+
+            Data.Entities.Customer validatedCustomer = new Data.Entities.Customer()
+            {
+                DateOfBirth = customer.DateOfBirth,
+                EmailAddress = customer.EmailAddress,
+                Forename = customer.Forename,
+                PolicyReference = customer.PolicyReference,
+                Surname = customer.Surname,
+            };
+
+            var id = _customerRepository.CreateCustomer(validatedCustomer);
+            return id;
+        }
+        
+        public Customer GetCustomer(int id)
+        {
+            var customer = _customerRepository.GetCustomer(id);
+
+            Customer retrievedCustomer = new Customer()
+            {
+                DateOfBirth = customer.DateOfBirth,
+                EmailAddress = customer.EmailAddress,
+                Forename = customer.Forename,
+                PolicyReference = customer.PolicyReference,
+                Surname = customer.Surname,
+            };
+
+            return retrievedCustomer;
         }
 
         public void ValidateCustomer(Customer customer)
